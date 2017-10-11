@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="The wavelength of red light is 420nm"
         android:textSize="32dp"
        />
 
@@ -33,6 +32,16 @@
 
     <TextView
         android:id="@+id/answer_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+    <Button
+        android:id="@+id/next_button"
+        android:text="Next"
+        android:enabled="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
