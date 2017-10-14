@@ -71,13 +71,15 @@ public class MainActivity extends AppCompatActivity {
             score = savedInstanceState.getInt(SCORE, 0);
         }
 
-        quiz = Quiz.getInstance();
+        quiz = new QuizRepository(this).getQuiz();
 
         showQuestion();
 
         if (questionAnswered) {
             checkAnswer(lastAnswer);
         }
+
+
     }
 
     private void nextQuestion() {
