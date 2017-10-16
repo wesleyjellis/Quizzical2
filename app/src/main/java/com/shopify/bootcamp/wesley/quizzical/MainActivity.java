@@ -7,8 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements QuizRepository.Callback {
 
     private static final String LAST_ANSWER = "lastAnswer";
     private static final String QUESTION_ANSWERED = "question_answered";
@@ -71,14 +72,7 @@ public class MainActivity extends AppCompatActivity {
             score = savedInstanceState.getInt(SCORE, 0);
         }
 
-        quiz = new QuizRepository(this).getQuiz();
-
-        showQuestion();
-
-        if (questionAnswered) {
-            checkAnswer(lastAnswer);
-        }
-
+        new QuizRepository(this).getRemoteQuiz(this);
 
     }
 
@@ -127,5 +121,20 @@ public class MainActivity extends AppCompatActivity {
         outState.putBoolean(QUESTION_ANSWERED, questionAnswered);
         outState.putInt(CURRENT_QUESTION, currentQuestion);
         outState.putInt(SCORE, score);
+    }
+
+    @Override
+    public void onFailure() {
+        Toast.makeText(this, "Could not access remote quiz", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onSuccess(Quiz quiz) {
+        this.quiz = quiz;
+        showQuestion();
+
+        if (questionAnswered) {
+            checkAnswer(lastAnswer);
+        }
     }
 }
