@@ -1,6 +1,7 @@
 package com.shopify.bootcamp.wesley.quizzical;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.squareup.moshi.JsonAdapter;
@@ -8,6 +9,7 @@ import com.squareup.moshi.Moshi;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import okio.Okio;
 import retrofit2.Call;
@@ -50,15 +52,11 @@ public class QuizRepository {
     }
 
 
-    public void getRemoteQuiz(final Callback callback) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build();
 
-        QuizService service = retrofit.create(QuizService.class);
+    public void getRemoteQuiz(int id, final Callback callback) {
+        QuizService service = getQuizService();
 
-        service.getQuiz().enqueue(new retrofit2.Callback<Quiz>() {
+        service.getQuiz(id).enqueue(new retrofit2.Callback<Quiz>() {
             @Override
             public void onResponse(Call<Quiz> call, Response<Quiz> response) {
                 if (response.isSuccessful()) {
@@ -73,6 +71,39 @@ public class QuizRepository {
                 callback.onFailure();
             }
         });
+    }
+
+    public void getRemoteQuizzes(final QuizzesCallback callback) {
+        QuizService service = getQuizService();
+
+        service.getQuizzes().enqueue(new retrofit2.Callback<List<Quiz>>() {
+            @Override
+            public void onResponse(Call<List<Quiz>> call, Response<List<Quiz>> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(response.body());
+                } else {
+                    callback.onFailure();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Quiz>> call, Throwable t) {
+                callback.onFailure();
+            }
+        });
+    }
+
+    private QuizService getQuizService() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(MoshiConverterFactory.create())
+                .build();
+        return retrofit.create(QuizService.class);
+    }
+
+    public interface QuizzesCallback {
+        void onFailure();
+        void onSuccess(List<Quiz> quizzes);
     }
 
     public interface Callback {

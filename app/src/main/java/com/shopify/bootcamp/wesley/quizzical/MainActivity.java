@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity implements QuizRepository.Ca
     private static final String CURRENT_QUESTION = "current_question";
     private static final String SCORE = "score";
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    public static final String QUIZ_ID = "quiz_id";
 
     private TextView answerTextView;
     private TextView questionTextView;
@@ -72,7 +73,9 @@ public class MainActivity extends AppCompatActivity implements QuizRepository.Ca
             score = savedInstanceState.getInt(SCORE, 0);
         }
 
-        new QuizRepository(this).getRemoteQuiz(this);
+        int id = getIntent().getIntExtra(QUIZ_ID, -1);
+
+        new QuizRepository(this).getRemoteQuiz(id, this);
 
     }
 

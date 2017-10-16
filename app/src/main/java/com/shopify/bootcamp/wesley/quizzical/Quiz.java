@@ -6,7 +6,17 @@ import java.util.List;
 
 public class Quiz {
 
+    private String title;
+    private int id;
     private List<Question> questions = new ArrayList<>();
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 
     public List<Question> getQuestions() {
         return questions;
